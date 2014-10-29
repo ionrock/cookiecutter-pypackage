@@ -1,6 +1,8 @@
 .PHONY: clean-pyc clean-build docs clean
+VENV=venv
 
 help:
+	@echo "bootstrap - create a virtualenv and install the necessary packages for development."
 	@echo "clean - remove all build, test, coverage and Python artifacts"
 	@echo "clean-build - remove build artifacts"
 	@echo "clean-pyc - remove Python file artifacts"
@@ -12,6 +14,10 @@ help:
 	@echo "docs - generate Sphinx HTML documentation, including API docs"
 	@echo "release - package and upload a release"
 	@echo "dist - package"
+
+bootstrap:
+	virtualenv ${VENV}
+	${VENV}/bin/pip install -r dev_requirements.txt
 
 clean: clean-build clean-pyc clean-test
 
@@ -35,7 +41,7 @@ lint:
 	flake8 {{ cookiecutter.repo_name }} tests
 
 test:
-	python setup.py test
+	py.test
 
 test-all:
 	tox
@@ -56,9 +62,7 @@ docs:
 
 release: clean
 	python setup.py sdist upload
-	python setup.py bdist_wheel upload
 
 dist: clean
 	python setup.py sdist
-	python setup.py bdist_wheel
 	ls -l dist

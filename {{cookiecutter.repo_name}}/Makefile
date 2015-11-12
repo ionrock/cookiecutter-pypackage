@@ -52,10 +52,7 @@ test-all:
 	tox
 
 coverage:
-	coverage run --source {{ cookiecutter.repo_name }} setup.py test
-	coverage report -m
-	coverage html
-	open htmlcov/index.html
+	$(VENV)/bin/py.test --cov={{ cookiecutter.repo_name }} --cov-report term
 
 docs:
 	rm -f docs/{{ cookiecutter.repo_name }}.rst

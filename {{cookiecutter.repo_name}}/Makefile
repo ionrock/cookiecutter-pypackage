@@ -1,7 +1,8 @@
 .PHONY: clean-pyc clean-build docs clean
-VENV=venv
+VENV=.venv
 CHEESE=https://pypi.python.org/pypi
 BUMPTYPE=patch
+SPHINXBUILD=`realpath $VENV`/bin/sphinx-build
 
 help:
 	@echo "bootstrap - create a virtualenv and install the necessary packages for development."
@@ -57,9 +58,10 @@ coverage:
 docs:
 	rm -f docs/{{ cookiecutter.repo_name }}.rst
 	rm -f docs/modules.rst
-	$(VENV)/bin/sphinx-apidoc -o docs/ {{ cookiecutter.repo_name }}
-	$(MAKE) -C docs clean
-	$(MAKE) -C docs html
+	source $(VENV)/bin/activate
+	sphinx-apidoc -o docs/ {{ cookiecutter.repo_name }}
+	$(MAKE) -f docs/Makefile -C docs clean
+	$(MAKE) -f docs/Makefile -C docs html
 	open docs/_build/html/index.html
 
 release: clean
